@@ -4,7 +4,11 @@
 const { db } = require('./db/models');
 // and our server that we already created and used as the previous entry point is 'server.js'
 const app = require('./app');
-const port = process.env.PORT || 3000;
+// const port = process.env.PORT;
+//import environment variables using npm install dotenv
+const dotenv = require('dotenv');
+dotenv.config();
+const port = process.env.PORT;
 
 /** 
  * sequelize
@@ -16,7 +20,10 @@ const port = process.env.PORT || 3000;
     console.error('Unable to connect to the database:', err);
   }); */
 
-db.sync({ force: true }) // sync our database
+db
+  .sync
+  // { force: true }
+  () // sync our database
   .then(() => {
     db.authenticate();
   })
@@ -24,7 +31,7 @@ db.sync({ force: true }) // sync our database
     console.log('Connection to database has been established successfully.');
   })
   .then(function() {
-    app.listen(port, () => {
+    app.listen(port || 3000, () => {
       console.log(`Express Server is listening to requests on port ${port}`);
     }); // then start listening with our express server once we have synced
   })
